@@ -2,6 +2,7 @@ import 'package:akti4_firebase_todo/screens/dashboard_screen.dart';
 import 'package:akti4_firebase_todo/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'email_verification_screen.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -98,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return const DashboardScreen();
+                  return const EmailVerificationScreen();
                 }));
               },
               child: const Text('Login'),
