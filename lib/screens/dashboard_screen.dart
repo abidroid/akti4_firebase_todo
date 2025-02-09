@@ -2,6 +2,7 @@ import 'package:akti4_firebase_todo/screens/profile_screen.dart';
 import 'package:akti4_firebase_todo/screens/update_task_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/task_card.dart';
 import 'add_task_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -43,78 +44,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ]),
       body: ListView(
         children: [
-          Card(
-            color: Colors.amber,
-            child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    Row(
-                      children: [
-                        Text('Task: '),
-                        Text('Perform Umrah'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('Date: '),
-                        Text('9 Feb 2025'),
-                      ],
-                    ),
-
-                    Row(
-                      spacing: 16,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(onPressed: (){}, child: const Text('DELETE')),
-                        ElevatedButton(onPressed: (){
-
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                            return const UpdateTaskScreen();
-                          }));
-
-
-                        }, child: const Text('UPDATE')),
-                      ],
-                    )
-                  ],
-                )),
-          ),
-          Card(
-            color: Colors.amber,
-            child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  spacing: 16,
-                  children: [
-                    Row(
-                      children: [
-                        Text('Task: '),
-                        Text('Perform Umrah'),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('Date: '),
-                        Text('9 Feb 2025'),
-                      ],
-                    ),
-
-                    Row(
-                      spacing: 16,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(onPressed: (){}, child: const Text('DELETE')),
-                        ElevatedButton(onPressed: (){}, child: const Text('UPDATE')),
-                      ],
-                    )
-                  ],
-                )),
-          ),
+          TaskCard(),
+          TaskCard(),
+          TaskCard(),
+          TaskCard(),
 
         ],
       ),
     );
   }
 }
+
