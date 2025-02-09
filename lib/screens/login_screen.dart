@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (context) {
-                  return const EmailVerificationScreen();
+                  return const DashboardScreen();
                 }));
               },
               child: const Text('Login'),
