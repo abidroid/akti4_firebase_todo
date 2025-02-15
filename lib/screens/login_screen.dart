@@ -1,5 +1,6 @@
 import 'package:akti4_firebase_todo/screens/dashboard_screen.dart';
 import 'package:akti4_firebase_todo/screens/sign_up_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'email_verification_screen.dart';
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () {
+              onPressed: () async {
                 // Handle login button press
                 String email = emailC.text.trim();
                 String password = passC.text.trim();
@@ -96,11 +97,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 // }
 
 
+                try {
+                  FirebaseAuth auth = FirebaseAuth.instance;
+                  UserCredential userCredentials = await auth
+                      .signInWithEmailAndPassword(
+                      email: email, password: password);
 
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const DashboardScreen();
-                }));
+                  if (userCredentials != null) {
+
+
+
+                    if ( userCredentials.user!.emailVerified) {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const DashboardScreen();
+                      }));
+                    }else {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return const EmailVerificationScreen();
+                      }));
+                    }
+
+
+
+                  }
+                }
+                on FirebaseAuthException catch (e){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.message!),
+                    ),
+                  );
+                }
+
+
               },
               child: const Text('Login'),
             ),

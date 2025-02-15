@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "827287003798",
+    "project_id": "akti4todo",
+    "storage_bucket": "akti4todo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:827287003798:android:1890a3389bf90d025a18b7",
+        "android_client_info": {
+          "package_name": "com.akti.akti4_firebase_todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4SXSx-cHngKBqX-6bjha7trifKj0gK3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

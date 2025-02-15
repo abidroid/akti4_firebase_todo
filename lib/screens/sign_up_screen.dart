@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -134,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {
+                onPressed: () async {
                   // Handle login button press
                   String name = nameC.text.trim();
                   String phone = phoneC.text.trim();
@@ -142,31 +144,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   String password = passC.text.trim();
                   String confirmPassword = confirmPassC.text.trim();
 
-                  if( name.isEmpty){
+                  // if( name.isEmpty){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     const SnackBar(
+                  //       content: Text('Name is required'),
+                  //     ),
+                  //   );
+                  //
+                  //   return;
+                  // }
+
+                  // if( password.length < 6 ){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     const SnackBar(
+                  //       content: Text('Password must be at least 6 characters'),
+                  //     ),
+                  //   );
+                  //   return;
+                  // }
+
+                  // if( password != confirmPassword){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     const SnackBar(
+                  //       content: Text('Passwords do not match'),
+                  //     ),
+                  //   );
+                  //   return;
+                  // }
+
+                  FirebaseAuth auth = FirebaseAuth.instance;
+
+                  try {
+                    UserCredential userCredentials = await auth.createUserWithEmailAndPassword(email: email, password: password);
+
+
+                    if( userCredentials.user != null){
+
+                      // Save user data in cloud firestore
+
+                      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+                      await firestore.collection('users')
+                      .doc(userCredentials.user!.uid)
+                      .set({
+
+                        'name': name,
+                        'phone': phone,
+                        'email': email,
+                        'gender': gender,
+                        'uid': userCredentials.user!.uid,
+                        'photo': null,
+                        'createdOn': DateTime.now().millisecondsSinceEpoch,
+                      });
+
+
+
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Registration successful'),
+                        ),
+                      );
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Registration failed'),
+                        ),
+                      );
+                    }
+                  }
+                  on FirebaseAuthException catch (e){
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Name is required'),
+                      SnackBar(
+                        content: Text(e.message!),
                       ),
                     );
-
-                    return;
                   }
 
-                  if( password.length < 6 ){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Password must be at least 6 characters'),
-                      ),
-                    );
-                  }
 
-                  if( password != confirmPassword){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Passwords do not match'),
-                      ),
-                    );
-                  }
+
                 },
                 child: const Text('REGISTER'),
               ),

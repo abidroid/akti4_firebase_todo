@@ -1,9 +1,11 @@
 import 'package:akti4_firebase_todo/screens/profile_screen.dart';
 import 'package:akti4_firebase_todo/screens/update_task_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/task_card.dart';
 import 'add_task_screen.dart';
+import 'login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -38,7 +40,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
                 icon: Icon(Icons.person)),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Confirmation!!!'),
+                        content: Text('Are you sure to logout ?'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('No')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+
+                                FirebaseAuth.instance.signOut();
+
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
+                                  return const LoginScreen();
+                                }));
+
+                              },
+                              child: Text('Yes')),
+                        ],
+                      );
+                    });
+
+
+              },
               icon: Icon(Icons.logout),
             ),
           ]),
@@ -48,10 +81,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           TaskCard(),
           TaskCard(),
           TaskCard(),
-
         ],
       ),
     );
   }
 }
-
