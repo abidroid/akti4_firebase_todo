@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../screens/update_task_screen.dart';
@@ -7,8 +8,10 @@ import '../screens/update_task_screen.dart';
 class TaskCard extends StatelessWidget {
   const TaskCard({
     super.key,
+    required this.taskDoc,
   });
 
+  final QueryDocumentSnapshot taskDoc;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -21,13 +24,13 @@ class TaskCard extends StatelessWidget {
               Row(
                 children: [
                   Text('Task: '),
-                  Text('Perform Umrah'),
+                  Text(taskDoc['taskName']),
                 ],
               ),
               Row(
                 children: [
                   Text('Date: '),
-                  Text('9 Feb 2025'),
+                  Text(taskDoc['createdOn'].toString()),
                 ],
               ),
 
