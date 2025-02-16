@@ -60,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 FirebaseAuth.instance.signOut();
 
                                 Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
+                                    .pushReplacement(MaterialPageRoute(builder: (context) {
                                   return const LoginScreen();
                                 }));
 

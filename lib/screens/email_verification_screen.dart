@@ -1,4 +1,9 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'dashboard_screen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   const EmailVerificationScreen({super.key});
@@ -9,6 +14,34 @@ class EmailVerificationScreen extends StatefulWidget {
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+
+  Timer? timer;
+
+  // this will execute first time the screen is opened
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseAuth.instance.currentUser!.sendEmailVerification();
+
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      checkEmailVerification();
+    });
+
+  }
+
+  checkEmailVerification() {
+    FirebaseAuth.instance.currentUser!.reload();
+
+    if (FirebaseAuth.instance.currentUser!.emailVerified) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return const DashboardScreen();
+      }));
+    }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +61,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               textAlign: TextAlign.center,
             ),
             CircularProgressIndicator(),
-            ElevatedButton(onPressed: () {}, child: const Text('Resend Email')),
+            ElevatedButton(onPressed: () {
+              FirebaseAuth.instance.currentUser!.sendEmailVerification();
+            }, child: const Text('Resend Email')),
           ],
         ),
       ),

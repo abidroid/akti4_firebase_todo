@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -36,7 +37,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () {
+                String email = emailC.text.trim();
+
+                FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+              },
               child: const Text('Send Password Reset Email'),
             ),
           ],

@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     if ( userCredentials.user!.emailVerified) {
                       Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
+                          .pushReplacement(MaterialPageRoute(builder: (context) {
                         return const DashboardScreen();
                       }));
                     }else {
