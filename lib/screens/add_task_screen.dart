@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -8,7 +10,6 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-
   var taskC = TextEditingController();
 
   @override
@@ -38,24 +39,37 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 foregroundColor: Colors.white,
               ),
               onPressed: () {
-
                 String taskName = taskC.text.trim();
 
-                if( taskName.isEmpty){
+                if (taskName.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Task Name is required'),
                     ),
                   );
+                  return;
                 }
 
+                int createdOn = DateTime.now().millisecondsSinceEpoch;
+                String uid = FirebaseAuth.instance.currentUser!.uid;
+
+                var taskRef = FirebaseFirestore.instance
+                    .collection('tasks')
+                    .doc(uid)
+                    .collection('tasks')
+                    .doc();
+
+                taskRef.set({
+                  'taskName': taskName,
+                  'createdOn': createdOn,
+                  'taskId': taskRef.id,
+                });
               },
               child: const Text('Save'),
             ),
           ],
         ),
       ),
-
     );
   }
 }
