@@ -1,8 +1,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../screens/update_task_screen.dart';
+import '../utility/functions.dart';
 
 // Re-usable Widget
 class TaskCard extends StatelessWidget {
@@ -30,7 +32,7 @@ class TaskCard extends StatelessWidget {
               Row(
                 children: [
                   Text('Date: '),
-                  Text(taskDoc['createdOn'].toString()),
+                  Text(getHumanReadableDate(taskDoc['createdOn'])),
                 ],
               ),
 
@@ -53,4 +55,7 @@ class TaskCard extends StatelessWidget {
           )),
     );
   }
+
+
+
 }
