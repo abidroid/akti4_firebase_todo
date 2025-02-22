@@ -1,5 +1,5 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +14,7 @@ class TaskCard extends StatelessWidget {
   });
 
   final QueryDocumentSnapshot taskDoc;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -35,27 +36,70 @@ class TaskCard extends StatelessWidget {
                   Text(getHumanReadableDate(taskDoc['createdOn'])),
                 ],
               ),
-
               Row(
                 spacing: 16,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(onPressed: (){}, child: const Text('DELETE')),
-                  ElevatedButton(onPressed: (){
+                  ElevatedButton(
+                      onPressed: () async {
+                        // alert dialog
 
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                      return const UpdateTaskScreen();
-                    }));
+                        // CTRL + ALT + L
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Confirmation!!!'),
+                                content:
+                                    Text('Are you sure to delete this task ?'),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('No')),
+                                  TextButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).pop();
+                                        await FirebaseFirestore.instance
+                                            .collection('tasks')
+                                            .doc(FirebaseAuth
+                                                .instance.currentUser!.uid)
+                                            .collection('tasks')
+                                            .doc(taskDoc.id)
+                                            .delete();
 
-
-                  }, child: const Text('UPDATE')),
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Task Deleted'),
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.delete),
+                                          Text('Delete'),
+                                        ],
+                                      )),
+                                ],
+                              );
+                            });
+                      },
+                      child: const Text('DELETE')),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return UpdateTaskScreen(taskSnapshot: taskDoc,);
+                        }));
+                      },
+                      child: const Text('UPDATE')),
                 ],
               )
             ],
           )),
     );
   }
-
-
-
 }
